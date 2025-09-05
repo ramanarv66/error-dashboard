@@ -1,0 +1,91 @@
+.stat-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(57, 255, 20, 0.2);
+  border-radius: 15px;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translateY(-5px) scale(1.02);
+    border-color: rgba(57, 255, 20, 0.5);
+    box-shadow: 0 20px 40px rgba(57, 255, 20, 0.2);
+
+    &::before {
+      opacity: 1;
+    }
+
+    .stat-value {
+      transform: scale(1.05);
+    }
+  }
+
+  .stat-label {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  .stat-value {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: rgb(255, 107, 0);
+    text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+    transition: transform 0.3s ease;
+    
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
+  }
+
+  .stat-trend {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.5);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    .trend-icon {
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+  }
+
+  &.trend-up {
+    .trend-icon {
+      color: rgb(255, 107, 0);
+    }
+  }
+
+  &.trend-down {
+    .trend-icon {
+      color: #ff3b30;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
