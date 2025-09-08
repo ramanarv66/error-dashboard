@@ -1,0 +1,36 @@
+2025-08-21 14:01:33,511 [http-nio-8080-exec-1] DEBUG com.example.util.LoggerUtil - Invalid user input detected
+2025-08-21 14:01:33,511 [worker-1] INFO com.example.controller.HomeController - Database connection closed
+2025-08-21 14:01:33,511 [worker-1] ERROR com.example.MainApp - Scheduled task executed
+2025-08-21 14:01:33,511 [scheduler-1] DEBUG com.example.dao.UserDAO - Invalid user input detected
+2025-08-21 14:01:33,511 [http-nio-8080-exec-1] INFO com.example.util.LoggerUtil - Starting application...
+2025-08-21 14:01:33,511 [scheduler-1] DEBUG com.example.service.UserService - Unhandled exception occurred
+2025-08-21 14:01:33,511 [scheduler-1] WARN com.example.dao.UserDAO - Unhandled exception occurred
+2025-08-21 14:01:33,511 [http-nio-8080-exec-1] INFO com.example.util.LoggerUtil - Fetching data from database
+2025-08-21 14:01:33,511 [worker-2] ERROR com.example.service.UserService - Null pointer exception encountered
+2025-08-21 14:01:33,511 [worker-2] INFO com.example.util.LoggerUtil - Database connection closed
+2025-08-21 14:01:33,511 [main] INFO com.example.MainApp - Retrying connection to server
+2025-08-21 14:01:33,511 [main] INFO com.example.service.UserService - Fetching data from database
+2025-08-21 14:01:33,511 [http-nio-8080-exec-1] ERROR com.example.service.UserService - Database connection closed
+2025-08-21 14:01:33,511 [worker-1] WARN com.example.util.LoggerUtil - Configuration loaded successfully
+2025-08-21 14:01:33,511 [scheduler-1] WARN com.example.util.LoggerUtil - Fetching data from database
+2025-08-21 14:01:33,511 [worker-2] DEBUG com.example.service.UserService - Starting application...
+2025-08-21 14:01:33,511 [main] ERROR com.example.dao.UserDAO - Configuration loaded successfully
+2025-08-21 14:01:33,511 [scheduler-1] INFO com.example.controller.HomeController - User login successful
+2025-08-21 14:01:33,511 [worker-1] ERROR com.example.controller.HomeController - Null pointer exception encountered
+2025-08-21 14:01:33,511 [scheduler-1] INFO com.example.dao.UserDAO - Fetching data from database
+2025-08-21 14:01:33,511 [scheduler-1] WARN com.example.service.UserService - User login successful
+2025-08-21 14:01:33,511 [scheduler-1] DEBUG com.example.util.LoggerUtil - Invalid user input detected
+2025-08-21 14:01:33,511 [worker-2] WARN com.example.controller.HomeController - Fetching data from database
+2025-08-21 14:01:33,511 [worker-1] WARN com.example.controller.HomeController - Database connection closed
+2025-08-21 14:01:33,511 [main] ERROR com.example.controller.HomeController - Null pointer exception encountered
+2025-08-21 14:01:33,511 [worker-1] ERROR com.example.dao.UserDAO - Scheduled task executed
+2025-08-21 14:01:33,511 [scheduler-1] INFO com.example.service.UserService - Retrying connection to server
+2025-08-21 14:01:33,511 [worker-2] DEBUG com.example.controller.HomeController - User login successful
+2025-08-21 14:01:33,511 [main] ERROR com.example.util.LoggerUtil - Null pointer exception encountered
+2025-08-21 14:01:33,511 [worker-2] INFO com.example.controller.HomeController - Fetching data from database
+2025-08-21 14:01:33,511 [scheduler-1] INFO com.example.controller.HomeController - Null pointer exception encountered
+2025-08-21 14:01:33,511 [http-nio-8080-exec-1] WARN com.example.controller.HomeController - Retrying connection to server
+2025-08-21 14:01:33,511 [http-nio-8080-exec-1] INFO com.example.MainApp - Fetching data from database
+2025-08-21 14:01:33,512 [main] INFO com.example.service.UserService - User login successful
+2025-08-21 14:01:33,512 [http-nio-8080-exec-1] INFO com.example.service.UserService - Retrying connection to server
+2025-08-21 14:01:33,512 [worker-2] INFO com.example.service.UserService - Database connection closed

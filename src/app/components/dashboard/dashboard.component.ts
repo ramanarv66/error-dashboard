@@ -7,6 +7,7 @@ import { ErrorLogTableComponent } from '../error-log-table/error-log-table.compo
 import { ErrorDataService } from '../../services/error-data.service';
 import { StatCard } from '../../models/stats.model';
 import { ErrorLog } from '../../models/error-log.model';
+import { FileUploadComponent } from '../file-upload/file-upload.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +17,8 @@ import { ErrorLog } from '../../models/error-log.model';
     HeaderComponent,
     StatsCardComponent,
     ErrorChartComponent,
-    ErrorLogTableComponent
+    ErrorLogTableComponent,
+    FileUploadComponent
   ],
   template: `
     <div class="dashboard-wrapper">
@@ -26,6 +28,7 @@ import { ErrorLog } from '../../models/error-log.model';
       <div class="dashboard-container">
         <!-- Header Section -->
         <app-header></app-header>
+        <app-file-upload></app-file-upload>
 
         <!-- Stats Grid -->
         <div class="stats-grid">

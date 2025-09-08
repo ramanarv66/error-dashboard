@@ -14,4 +14,9 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 })
 export class AppComponent {
   title = 'error-dashboard';
+
+  uplodFile(){
+    console.log('upload file');
+    
+  }
 }
