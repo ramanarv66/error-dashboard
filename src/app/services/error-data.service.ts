@@ -12,167 +12,18 @@ import {
   finalize
 } from 'rxjs/operators';
 import { ErrorLog } from '../models/error-log.model';
-import { N8NApiResponse } from '../models/n8n-response.model';
 import { StatCard } from '../models/stats.model';
+import { N8NApiResponse } from '../models/n8n-response.model';
 import { ChartData } from 'chart.js';
 import { environment } from '../../environments/environment';
+
 @Injectable({
   providedIn: 'root'
 })
 export class ErrorDataService {
-
-
-//  // Using Angular 19 signals for reactive state management
-//   private errorLogs = signal<ErrorLog[]>([
-//     { id: 1, errorType: 'DEBUG', message: 'com.example.uti', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 2, errorType: 'INFO', message: 'com.example.co', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 3, errorType: 'ERROR', message: 'com.example.Ma', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 4, errorType: 'DEBUG', message: 'com.example.da', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 5, errorType: 'INFO', message: 'com.example.uti', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 6, errorType: 'DEBUG', message: 'com.example.se', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 7, errorType: 'WARN', message: 'com.example.da', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 8, errorType: 'INFO', message: 'com.example.uti', date: '2025-08-21', time: '14:01:33.511' },
-//     { id: 9, errorType: 'ERROR', message: 'com.example.se', date: '2025-08-21', time: '14:01:33.511' }
-//   ]);
-
-//   private newErrorCount = new BehaviorSubject<number>(0);
-  
-//   // Computed signals for reactive calculations
-//   readonly totalErrors = computed(() => 
-//     this.errorLogs().filter(log => log.errorType === 'ERROR').length
-//   );
-  
-//   readonly totalWarnings = computed(() => 
-//     this.errorLogs().filter(log => log.errorType === 'WARN').length
-//   );
-  
-//   readonly totalInfo = computed(() => 
-//     this.errorLogs().filter(log => log.errorType === 'INFO').length
-//   );
-  
-//   readonly totalDebug = computed(() => 
-//     this.errorLogs().filter(log => log.errorType === 'DEBUG').length
-//   );
-  
-//   readonly systemHealth = computed(() => {
-//     const total = this.errorLogs().length;
-//     const errors = this.totalErrors();
-//     return total > 0 ? Math.round((1 - errors / total) * 100) : 100;
-//   });
-
-//   constructor() {
-//     // Simulate real-time error updates
-//     this.startRealTimeSimulation();
-//   }
-
-//   getErrorLogs(): ErrorLog[] {
-//     return this.errorLogs();
-//   }
-
-//   getStats(): StatCard[] {
-//     return [
-//       {
-//         label: 'Total Errors',
-//         value: this.totalErrors(),
-//         trend: '↑ 12% from last hour',
-//         trendDirection: 'up'
-//       },
-//       {
-//         label: 'Warnings',
-//         value: this.totalWarnings(),
-//         trend: '↓ 5% from last hour',
-//         trendDirection: 'down'
-//       },
-//       {
-//         label: 'Total Logs',
-//         value: this.errorLogs().length,
-//         trend: 'Real-time monitoring',
-//         trendDirection: 'neutral'
-//       },
-//       {
-//         label: 'System Health',
-//         value: `${this.systemHealth()}%`,
-//         trend: 'Optimal performance',
-//         trendDirection: this.systemHealth() > 80 ? 'up' : 'down'
-//       }
-//     ];
-//   }
-
-//   getChartData(): { trendData: ChartData; distributionData: ChartData } {
-//     return {
-//       trendData: {
-//         labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00', '24:00'],
-//         datasets: [
-//           {
-//             label: 'Errors',
-//             data: [3, 5, 2, 8, 4, 6, 2],
-//             borderColor: '#ff3b30',
-//             backgroundColor: 'rgba(255, 59, 48, 0.1)',
-//             tension: 0.4,
-//             fill: true
-//           },
-//           {
-//             label: 'Warnings',
-//             data: [1, 3, 4, 2, 5, 3, 1],
-//             borderColor: '#ffcc00',
-//             backgroundColor: 'rgba(255, 204, 0, 0.1)',
-//             tension: 0.4,
-//             fill: true
-//           },
-//           {
-//             label: 'Info',
-//             data: [10, 15, 12, 18, 14, 16, 13],
-//             borderColor: '#007aff',
-//             backgroundColor: 'rgba(0, 122, 255, 0.1)',
-//             tension: 0.4,
-//             fill: true
-//           }
-//         ]
-//       },
-//       distributionData: {
-//         labels: ['ERROR', 'WARN', 'INFO', 'DEBUG'],
-//         datasets: [{
-//           label: 'Distribution',
-//           data: [
-//             this.totalErrors(),
-//             this.totalWarnings(),
-//             this.totalInfo(),
-//             this.totalDebug()
-//           ],
-//           backgroundColor: [
-//             'rgba(255, 59, 48, 0.7)',
-//             'rgba(255, 204, 0, 0.7)',
-//             'rgba(0, 122, 255, 0.7)',
-//             'rgba(175, 82, 222, 0.7)'
-//           ]
-//         }]
-//       }
-//     };
-//   }
-
-//   getNewErrorCount(): Observable<number> {
-//     return this.newErrorCount.asObservable();
-//   }
-
-//   refreshData(): void {
-//     this.newErrorCount.next(0);
-//     // Simulate data refresh
-//     console.log('Data refreshed');
-//   }
-
-//   private startRealTimeSimulation(): void {
-//     interval(5000).subscribe(() => {
-//       if (Math.random() > 0.7) {
-//         const count = Math.floor(Math.random() * 5) + 1;
-//         this.newErrorCount.next(count);
-//       }
-//     });
-//   }
-
- private readonly apiUrl = environment.n8nWebhookUrl;
+  private readonly apiUrl = environment.n8nWebhookUrl;
   private readonly refreshInterval = environment.refreshInterval;
   private destroy$ = new Subject<void>();
-  private loginIdSubject$ = new Subject<void>();
   private http = inject(HttpClient);
 
   // Loading and error states
@@ -188,7 +39,7 @@ export class ErrorDataService {
   private newErrorCount = new BehaviorSubject<number>(0);
   private autoRefresh$ = new BehaviorSubject<boolean>(true);
   
-  // Computed signals for reactive calculations
+  // Computed signals remain the same...
   readonly totalErrors = computed(() => {
     const logs = this.errorLogs();
     return logs.filter(log => log.log_level === 'ERROR').length;
@@ -216,22 +67,9 @@ export class ErrorDataService {
     return Math.round((1 - errors / total) * 100);
   });
 
-  // Computed trend calculations
-  readonly errorTrend = computed(() => {
-    const current = this.totalErrors();
-    const previous = this.previousLogs().filter(log => log.log_level === 'ERROR').length;
-    return this.calculateTrendPercentage(current, previous);
-  });
-
-  readonly warningTrend = computed(() => {
-    const current = this.totalWarnings();
-    const previous = this.previousLogs().filter(log => log.log_level === 'WARN').length;
-    return this.calculateTrendPercentage(current, previous);
-  });
-
   constructor() {
-    // Initialize data on service creation
-    this.initializeData();
+    // Initialize with empty data
+    this.initializeEmptyState();
     
     // Set up auto-refresh if enabled
     if (environment.enableRealTimeUpdates) {
@@ -239,15 +77,14 @@ export class ErrorDataService {
     }
   }
 
-  // ============================================
-  // INITIALIZATION METHODS
-  // ============================================
-  
-  private initializeData(): void {
-    this.fetchErrorLogs().subscribe();
+  private initializeEmptyState(): void {
+    // Start with empty state, waiting for file upload
+    this.errorLogs.set([]);
+    this.lastUpdateTime.set(null);
   }
 
   private setupAutoRefresh(): void {
+    // Auto-refresh logic remains the same
     this.autoRefresh$
       .pipe(
         switchMap(shouldRefresh => 
@@ -256,151 +93,123 @@ export class ErrorDataService {
         takeUntil(this.destroy$)
       )
       .subscribe(() => {
-        if (this.autoRefresh$.value) {
+        if (this.autoRefresh$.value && this.errorLogs().length > 0) {
+          // Only refresh if we have data
           this.refreshData();
         }
       });
   }
-
-  // ============================================
-  // API METHODS
-  // ============================================
+    getNewErrorCount(): Observable<number> {
+    return this.newErrorCount.asObservable();
+  }
 
   /**
-   * Fetch error logs from N8N webhook
+   * Process logs from file upload
    */
-  fetchErrorLogs(payload?: any): Observable<ErrorLog[]> {
+  processUploadedLogs(responseData: any): void {
+    // Parse the response based on N8N webhook response format
+    if (responseData && Array.isArray(responseData)) {
+      const parsedLogs = this.parseLogData(responseData);
+      
+      // Store previous logs for trend calculation
+      this.previousLogs.set(this.errorLogs());
+      
+      // Update signals with new data
+      this.errorLogs.set(parsedLogs);
+      this.lastUpdateTime.set(new Date());
+      
+      // Check for new errors
+      this.checkForNewErrors(parsedLogs);
+    }
+  }
+
+  /**
+   * Parse log data from N8N response
+   */
+  private parseLogData(data: any[]): ErrorLog[] {
+    return data.map((item, index) => ({
+      id: index + 1,
+      date: item.date,
+      time: item.time,
+      log_level: item.log_level as 'ERROR' | 'WARN' | 'INFO' | 'DEBUG',
+      message: item.message
+    }));
+  }
+
+  /**
+   * Parse raw log file content (for direct text parsing if needed)
+   */
+  parseRawLogContent(content: string): ErrorLog[] {
+    const lines = content.split('\n').filter(line => line.trim());
+    const logs: ErrorLog[] = [];
+    
+    lines.forEach((line, index) => {
+      // Parse Java log format: 2025-08-21 14:01:33,511 [thread] LEVEL package - message
+      const logPattern = /^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2},\d{3})\s+\[([^\]]+)\]\s+(DEBUG|INFO|WARN|ERROR)\s+(.+)$/;
+      const match = line.match(logPattern);
+      
+      if (match) {
+        logs.push({
+          id: index + 1,
+          date: match[1],
+          time: match[2],
+          log_level: match[4] as 'ERROR' | 'WARN' | 'INFO' | 'DEBUG',
+          message: match[5]
+        });
+      }
+    });
+    
+    return logs;
+  }
+
+  /**
+   * Upload log file content to N8N
+   */
+  uploadLogContent(content: string): Observable<any> {
     this.loading.set(true);
     this.error.set(null);
-
-    // Default payload if not provided
-    const requestPayload = payload || {
-      action: 'fetch_logs',
-      timestamp: new Date().toISOString()
-    };
 
     const headers = new HttpHeaders({
-      'Content-Type': 'application/json'
+      'Content-Type': 'text/plain',
+      'Accept': '*/*'
     });
 
-    return this.http.post<N8NApiResponse>(
-      this.apiUrl,
-      requestPayload,
-      { headers }
-    ).pipe(
-      retry(2), // Retry failed requests up to 2 times
-      map(response => {
-        // Add IDs to logs if not present
-        const logsWithIds = response.data.map((log, index) => ({
-          ...log,
-          id: log.id || index + 1
-        }));
-        
-        // Store previous logs for trend calculation
-        this.previousLogs.set(this.errorLogs());
-        
-        // Update signals with new data
-        this.errorLogs.set(logsWithIds);
-        this.lastUpdateTime.set(new Date());
-        
-        // Check for new errors
-        this.checkForNewErrors(logsWithIds);
-        
-        return logsWithIds;
-      }),
-      catchError(this.handleError.bind(this)),
-      finalize(() => this.loading.set(false)),
-      shareReplay(1) // Share the result among multiple subscribers
-    );
+    return this.http.post(this.apiUrl, content, { headers })
+      .pipe(
+        map(response => {
+          this.loading.set(false);
+          return response;
+        }),
+        catchError(this.handleError.bind(this)),
+        finalize(() => this.loading.set(false))
+      );
   }
 
-  /**
-   * Upload log file to N8N webhook
-   */
-  uploadLogFile(file: File): Observable<ErrorLog[]> {
-    this.loading.set(true);
-    this.error.set(null);
-
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('action', 'upload_file');
-
-    // return this.http.post<N8NApiResponse>(
-    //   this.apiUrl,
-    //   formData
-    // ).pipe(
-    //   retry(1),
-    //   map(response => {
-    //     const logsWithIds = response.data.map((log, index) => ({
-    //       ...log,
-    //       id: log.id || index + 1
-    //     }));
-        
-    //     this.errorLogs.set(logsWithIds);
-    //     this.lastUpdateTime.set(new Date());
-        
-    //     return logsWithIds;
-    //   }),
-    //   catchError(this.handleError.bind(this)),
-    //   finalize(() => this.loading.set(false))
-    // );
-     let logsWithIds = this.sendLogFromAssets();
-     this.loginIdSubject$.subscribe((ids)=>{
-      return ids;
-     })
-     if(logsWithIds)
-        return logsWithIds;
-      else
-         return logsWithIds;
-      
-  }
-
-  /**
-   * Filter logs by date range
-   */
-  filterLogs(startDate?: string, endDate?: string, logLevel?: string): Observable<ErrorLog[]> {
-    const payload = {
-      action: 'filter_logs',
-      filters: {
-        startDate,
-        endDate,
-        logLevel
-      }
-    };
-
-    return this.fetchErrorLogs(payload);
-  }
-
-  // ============================================
-  // PUBLIC METHODS (Used by components)
-  // ============================================
-
+  // Other methods remain the same...
   getErrorLogs(): ErrorLog[] {
     return this.errorLogs();
   }
 
   getStats(): StatCard[] {
-    const errorTrendInfo = this.errorTrend();
-    const warningTrendInfo = this.warningTrend();
     const systemHealthValue = this.systemHealth();
     
     return [
       {
         label: 'Total Errors',
         value: this.totalErrors(),
-        trend: `${errorTrendInfo.direction === 'up' ? '↑' : '↓'} ${Math.abs(errorTrendInfo.percentage)}% from last update`,
-        trendDirection: errorTrendInfo.direction
+        trend: this.errorLogs().length > 0 ? 'Monitoring active' : 'Upload file to start',
+        trendDirection: this.totalErrors() > 0 ? 'down' : 'neutral'
       },
       {
         label: 'Warnings',
         value: this.totalWarnings(),
-        trend: `${warningTrendInfo.direction === 'up' ? '↑' : '↓'} ${Math.abs(warningTrendInfo.percentage)}% from last update`,
-        trendDirection: warningTrendInfo.direction
+        trend: this.errorLogs().length > 0 ? 'System warnings' : 'No data',
+        trendDirection: this.totalWarnings() > 0 ? 'down' : 'neutral'
       },
       {
         label: 'Total Logs',
         value: this.errorLogs().length,
-        trend: 'Real-time monitoring',
+        trend: this.errorLogs().length > 0 ? 'Logs loaded' : 'Awaiting upload',
         trendDirection: 'neutral'
       },
       {
@@ -413,16 +222,16 @@ export class ErrorDataService {
   }
 
   getChartData(): { trendData: ChartData; distributionData: ChartData } {
-    // Group logs by hour for trend chart
-    const hourlyData = this.groupLogsByHour();
+    // Group logs by time for trend chart
+    const timeGroups = this.groupLogsByTime();
     
     return {
       trendData: {
-        labels: Object.keys(hourlyData),
+        labels: Object.keys(timeGroups).slice(0, 7), // Show last 7 time points
         datasets: [
           {
             label: 'Errors',
-            data: Object.values(hourlyData).map(logs => 
+            data: Object.values(timeGroups).slice(0, 7).map(logs => 
               logs.filter(l => l.log_level === 'ERROR').length
             ),
             borderColor: '#ff3b30',
@@ -432,7 +241,7 @@ export class ErrorDataService {
           },
           {
             label: 'Warnings',
-            data: Object.values(hourlyData).map(logs => 
+            data: Object.values(timeGroups).slice(0, 7).map(logs => 
               logs.filter(l => l.log_level === 'WARN').length
             ),
             borderColor: '#ffcc00',
@@ -442,7 +251,7 @@ export class ErrorDataService {
           },
           {
             label: 'Info',
-            data: Object.values(hourlyData).map(logs => 
+            data: Object.values(timeGroups).slice(0, 7).map(logs => 
               logs.filter(l => l.log_level === 'INFO').length
             ),
             borderColor: '#007aff',
@@ -480,12 +289,64 @@ export class ErrorDataService {
     };
   }
 
-  getNewErrorCount(): Observable<number> {
-    return this.newErrorCount.asObservable();
+  private groupLogsByTime(): { [time: string]: ErrorLog[] } {
+    const grouped: { [time: string]: ErrorLog[] } = {};
+    
+    this.errorLogs().forEach(log => {
+      const timeKey = log.time.substring(0, 8); // Group by HH:MM:SS
+      if (!grouped[timeKey]) {
+        grouped[timeKey] = [];
+      }
+      grouped[timeKey].push(log);
+    });
+    
+    return grouped;
+  }
+
+  private checkForNewErrors(logs: ErrorLog[]): void {
+    const newErrors = logs.filter(log => log.log_level === 'ERROR').length;
+    const previousErrors = this.previousLogs().filter(log => log.log_level === 'ERROR').length;
+    
+    if (newErrors > previousErrors && this.previousLogs().length > 0) {
+      this.newErrorCount.next(newErrors - previousErrors);
+    }
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'An error occurred while uploading the file';
+    
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Error: ${error.error.message}`;
+    } else {
+      switch (error.status) {
+        case 0:
+          errorMessage = 'Unable to connect to N8N webhook. Please check CORS settings.';
+          break;
+        case 400:
+          errorMessage = 'Invalid file format or content.';
+          break;
+        case 413:
+          errorMessage = 'File is too large. Please upload a smaller file.';
+          break;
+        case 500:
+          errorMessage = 'N8N webhook error. Please check your workflow.';
+          break;
+        default:
+          errorMessage = `Upload error: ${error.status} - ${error.message}`;
+      }
+    }
+    
+    this.error.set(errorMessage);
+    console.error('Upload Error:', errorMessage, error);
+    return throwError(() => new Error(errorMessage));
   }
 
   refreshData(): void {
-    this.fetchErrorLogs().subscribe();
+    // Refresh only if we have data
+    if (this.errorLogs().length > 0) {
+      // Re-process current logs or fetch new ones
+      this.lastUpdateTime.set(new Date());
+    }
   }
 
   toggleAutoRefresh(): void {
@@ -496,155 +357,10 @@ export class ErrorDataService {
     return this.autoRefresh$.value;
   }
 
-  // ============================================
-  // HELPER METHODS
-  // ============================================
-
-  private groupLogsByHour(): { [hour: string]: ErrorLog[] } {
-    const grouped: { [hour: string]: ErrorLog[] } = {};
-    
-    this.errorLogs().forEach(log => {
-      const hour = log.time.split(':')[0] + ':00';
-      if (!grouped[hour]) {
-        grouped[hour] = [];
-      }
-      grouped[hour].push(log);
-    });
-    
-    // Ensure we have at least some hours for the chart
-    if (Object.keys(grouped).length === 0) {
-      const now = new Date();
-      for (let i = 0; i < 7; i++) {
-        const hour = `${String((now.getHours() - i + 24) % 24).padStart(2, '0')}:00`;
-        grouped[hour] = [];
-      }
-    }
-    
-    return grouped;
-  }
-
-  private checkForNewErrors(logs: ErrorLog[]): void {
-    const newErrors = logs.filter(log => log.log_level === 'ERROR').length;
-    const previousErrors = this.previousLogs().filter(log => log.log_level === 'ERROR').length;
-    
-    if (newErrors > previousErrors) {
-      this.newErrorCount.next(newErrors - previousErrors);
-    }
-  }
-
-  private calculateTrendPercentage(current: number, previous: number): { percentage: number; direction: 'up' | 'down' | 'neutral' } {
-    if (previous === 0 && current === 0) {
-      return { percentage: 0, direction: 'neutral' };
-    }
-    
-    if (previous === 0) {
-      return { percentage: 100, direction: 'up' };
-    }
-    
-    const percentage = Math.round(((current - previous) / previous) * 100);
-    const direction = percentage > 0 ? 'up' : percentage < 0 ? 'down' : 'neutral';
-    
-    return { percentage, direction };
-  }
-
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred while fetching logs';
-    
-    if (error.error instanceof ErrorEvent) {
-      // Client-side error
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      // Server-side error
-      switch (error.status) {
-        case 0:
-          errorMessage = 'Unable to connect to the server. Please check your internet connection.';
-          break;
-        case 400:
-          errorMessage = 'Invalid request. Please check your input.';
-          break;
-        case 401:
-          errorMessage = 'Authentication failed. Please login again.';
-          break;
-        case 403:
-          errorMessage = 'You do not have permission to access this resource.';
-          break;
-        case 404:
-          errorMessage = 'The webhook endpoint was not found.';
-          break;
-        case 500:
-          errorMessage = 'Internal server error. Please try again later.';
-          break;
-        default:
-          errorMessage = `Server error: ${error.status} - ${error.message}`;
-      }
-    }
-    
-    this.error.set(errorMessage);
-    console.error('API Error:', errorMessage, error);
-    return throwError(() => new Error(errorMessage));
-  }
-
-  // ============================================
-  // CLEANUP
-  // ============================================
-
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
     this.newErrorCount.complete();
     this.autoRefresh$.complete();
-  }
-
-  webhookUrl = 'https://ramana-ai-1.app.n8n.cloud/webhook-test/upload-log-file';
-  fileContent: string = '';
-  requestPayload: any = null;
-  response: any = null;
-  error1: any = null;
-   logsWithIds: any;
-   sendLogFromAssets() {
-    console.log('Sending as plain text...');
-    this.error1 = null;
-    this.response = null;
-    
-    // Read file from assets
-    this.http.get('assets/java_application.log', { responseType: 'text' })
-      .subscribe(
-        content => {
-          // Send ONLY the content as plain text (not wrapped in JSON)
-          const headers = new HttpHeaders({
-            'Content-Type': 'text/plain'  // Important: Set as text/plain
-          });
-          
-          // Send raw content directly
-          this.http.post(this.webhookUrl, content, { headers, responseType: 'text' })
-            .subscribe(
-              res => {
-                console.log('Success:', res);
-                let somData:any = res;
-                     this.logsWithIds = JSON.parse(somData).data.map((log:any, index:any) => ({
-          ...log,
-          id: log.id || index + 1
-        }));
-        
-        this.errorLogs.set(this.logsWithIds);
-        this.lastUpdateTime.set(new Date());
-        this.loginIdSubject$.next(this.logsWithIds)
-        return this.logsWithIds;
-                this.response = res || 'File sent successfully (no response body)';
-              },
-              err => {
-                console.error('Error:', err);
-                this.error1 = err.message;
-              }
-            );
-        },
-        fileError => {
-          this.error1 = 'Failed to read file: ' + fileError.message;
-        }
-      );
-       //     this.errorLogs.set(logsWithIds);
-    //     this.lastUpdateTime.set(new Date());
-        
-         return this.logsWithIds;
   }
 }
