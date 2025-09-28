@@ -8,7 +8,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
   imports: [CommonModule, HttpClientModule],
   template: `
     <div class="header">
-      <h1 class="header-title"> Error Logs Monitor</h1>
+      <h1 class="header-title"> Logs Analyser </h1>
       <div class="header-subtitle">
         REAL-TIME SYSTEM DIAGNOSTICS | {{ currentTime }}
       </div>

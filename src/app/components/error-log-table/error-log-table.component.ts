@@ -89,7 +89,7 @@ type LogLevel = 'ERROR' | 'WARN' | 'INFO' | 'DEBUG';
             <tr>
               <th [class.light-theme-header]="!isDarkMode()">Date</th>
               <th [class.light-theme-header]="!isDarkMode()">Time</th>
-              <th [class.light-theme-header]="!isDarkMode()">ThreadId</th>
+              <th [class.light-theme-header]="!isDarkMode()">Thread-Id</th>
               <th 
                 class="sortable-header" 
                 [class.light-theme-header]="!isDarkMode()"

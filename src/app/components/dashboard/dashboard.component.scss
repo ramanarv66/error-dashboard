@@ -189,3 +189,8 @@
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-10px); }
 }
+
+.light-theme {
+  color: #0000005f !important;
+  font-weight: 700;
+}

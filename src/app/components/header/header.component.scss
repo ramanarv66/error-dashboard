@@ -20,7 +20,7 @@
       transparent, 
       rgba(57, 255, 20, 0.2), 
       transparent);
-    animation: scan 3s linear infinite;
+    // animation: scan 3s linear infinite;
   }
 
   .header-title {
@@ -43,7 +43,7 @@
   }
 
   .header-subtitle {
-    color: rgba(57, 255, 20, 0.8);
+    color: rgb(255 153 81);
     margin-top: 0.5rem;
     font-size: 0.9rem;
     letter-spacing: 2px;

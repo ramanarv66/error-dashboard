@@ -29,7 +29,7 @@ body.dark-theme,
     box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
     
     .header-subtitle {
-      color: rgba(57, 255, 20, 0.8);
+      color: rgb(255 153 81);
     }
   }
 
@@ -271,6 +271,7 @@ body.light-theme,
     background: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(57, 255, 20, 0.15);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 15px;
     
     .toggle-label {
       color: #34495e;
@@ -305,7 +306,7 @@ body.light-theme,
     }
     
     .upload-button {
-      background: linear-gradient(135deg, #39ff14, rgba(46, 204, 113, 0.9));
+      background: linear-gradient(135deg, #2ad8f7, rgba(46, 204, 113, 0.9));
       color: #ffffff;
     }
   }

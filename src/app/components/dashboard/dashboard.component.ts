@@ -69,7 +69,7 @@ import { Subject, takeUntil } from 'rxjs';
         <div class="no-data-message" *ngIf="!loading() && errorLogs.length === 0">
           <div class="no-data-icon">📊</div>
           <h3>No Log Data Available</h3>
-          <p>Upload a log file to start monitoring system errors and performance</p>
+          <p [ngClass]="{ 'light-theme': !isDarkMode() }">Upload a log file to start monitoring system errors and performance</p>
         </div>
 
         <!-- Main Content (show only when logs are loaded) -->
@@ -139,6 +139,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
   loading = this.errorDataService.loading;
   error = this.errorDataService.error;
   lastUpdateTime = this.errorDataService.lastUpdateTime;
+
+  private themeService = inject(ThemeService);
 
   constructor(private errorDataService: ErrorDataService) {
     // React to changes in error logs
@@ -213,5 +215,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
     const hours = Math.floor(minutes / 60);
     return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+  }
+
+  isDarkMode(): boolean {
+    return this.themeService.isDarkMode();
   }
 }
