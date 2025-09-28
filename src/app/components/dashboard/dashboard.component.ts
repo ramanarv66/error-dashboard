@@ -60,7 +60,7 @@ import { Subject, takeUntil } from 'rxjs';
             <span class="toggle-label">Auto-refresh</span>
           </div>
           
-          <div class="last-update" *ngIf="lastUpdateTime()">
+          <div class="last-update" *ngIf="lastUpdateTime()" >
             Last updated: {{ formatLastUpdate() }}
           </div>
         </div>
@@ -73,7 +73,7 @@ import { Subject, takeUntil } from 'rxjs';
         </div>
 
         <!-- Main Content (show only when logs are loaded) -->
-        <div *ngIf="errorLogs.length > 0" class="content-wrapper">
+        <div *ngIf="errorLogs.length > 0" class="content-wrapper" >
           <!-- Stats Grid -->
           <div class="stats-grid">
             <app-stats-card 
@@ -84,13 +84,16 @@ import { Subject, takeUntil } from 'rxjs';
 
           <!-- Charts Grid -->
           <div class="charts-grid">
-      <!-- Stacked Line Chart -->
-      <app-error-chart
-        title="Error Trend Analysis - Stacked View"
-        chartType="bar"
-        [chartData]="trendChartData"
-        [isStacked]="true">
-      </app-error-chart>
+     <!-- <app-error-chart
+    title="Error Trend Analysis - Floating Bars"
+    chartType="bar"
+    [chartData]="trendChartData">
+  </app-error-chart> -->
+  <app-error-chart
+    title="Error Trend Analysis"
+    chartType="bar"
+    [chartData]="trendChartData">
+  </app-error-chart>
       
       <!-- Distribution Doughnut Chart -->
       <app-error-chart

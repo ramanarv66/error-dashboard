@@ -498,33 +498,285 @@ body {
     box-shadow 0.3s ease !important;
 }
 
-// Light theme specific styles for log table
 .light-theme {
+  // Fix stat card labels that appear faded
+  .stat-card {
+    .stat-label {
+      opacity: 0.9 !important; // Increase from 0.6
+    }
+    
+    .stat-trend {
+      opacity: 0.9 !important; // Increase from 0.5
+    }
+  }
+
+  // Fix controls bar text
+  .controls-bar {
+    .toggle-label {
+      opacity: 0.9 !important;
+    }
+  }
+
+  // Fix table text that appears faded
   .log-container {
-    .log-title {
-      color: #000000 !important;
+    .log-count {
+      opacity: 0.9 !important; // Increase from 0.6
+    }
+  }
+
+  // Fix pagination text
+  .pagination {
+    .page-info {
+      opacity: 0.9 !important; // Increase from 0.7
+    }
+  }
+
+  // Fix search placeholder
+  .search-input {
+    &::placeholder {
+      opacity: 0.6 !important; // Increase from 0.4
+    }
+  }
+
+  // Fix file upload text
+  .upload-container {
+    .file-size {
+      opacity: 0.8 !important; // Increase from 0.6
+    }
+  }
+}
+
+// ============================================
+// ALTERNATIVE: If you want darker text without changing opacity
+// ============================================
+.light-theme {
+  // Make muted text darker by adjusting the color instead of opacity
+  .stat-label,
+  .stat-trend,
+  .log-count,
+  .toggle-label,
+  .page-info {
+    color: #2c3e50 !important; // Darker gray instead of light gray
+  }
+  
+  // Make secondary text more visible
+  .file-size,
+  .no-data p,
+  .no-results p {
+    color: #34495e !important; // Medium gray instead of light gray
+  }
+}
+
+.quick-filters {
+  .filter-chip {
+    // Base styles - similar to upload summary
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid;
+    
+    // Default state (inactive)
+    background: rgba(128, 128, 128, 0.1);
+    border-color: rgba(128, 128, 128, 0.2);
+    color: rgba(128, 128, 128, 0.8);
+    
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    // ALL button when not active
+    &:first-child:not(.active) {
+      background: rgba(128, 128, 128, 0.1);
+      border-color: rgba(128, 128, 128, 0.2);
+      color: rgba(128, 128, 128, 0.7);
+    }
+    
+    // When active - ALL button
+    &:first-child.active {
+      background: rgba(57, 255, 20, 0.15);
+      border-color: rgba(57, 255, 20, 0.3);
+      color: #39ff14;
       font-weight: 700;
     }
-
-    .log-count {
-      color: #000000 !important;
-      opacity: 0.7;
+    
+    // ERROR chip styles
+    &.error-chip {
+      background: rgba(255, 59, 48, 0.15);
+      border-color: rgba(255, 59, 48, 0.3);
+      color: #ff3b30;
+      
+      &.active {
+        background: rgba(255, 59, 48, 0.25);
+        border-color: #ff3b30;
+        font-weight: 700;
+        box-shadow: 0 0 10px rgba(255, 59, 48, 0.2);
+      }
     }
+    
+    // WARN chip styles
+    &.warn-chip {
+      background: rgba(255, 204, 0, 0.15);
+      border-color: rgba(255, 204, 0, 0.3);
+      color: #ffcc00;
+      
+      &.active {
+        background: rgba(255, 204, 0, 0.25);
+        border-color: #ffcc00;
+        font-weight: 700;
+        box-shadow: 0 0 10px rgba(255, 204, 0, 0.2);
+      }
+    }
+    
+    // INFO chip styles
+    &.info-chip {
+      background: rgba(0, 122, 255, 0.15);
+      border-color: rgba(0, 122, 255, 0.3);
+      color: #007aff;
+      
+      &.active {
+        background: rgba(0, 122, 255, 0.25);
+        border-color: #007aff;
+        font-weight: 700;
+        box-shadow: 0 0 10px rgba(0, 122, 255, 0.2);
+      }
+    }
+    
+    // DEBUG chip styles
+    &.debug-chip {
+      background: rgba(175, 82, 222, 0.15);
+      border-color: rgba(175, 82, 222, 0.3);
+      color: #af52de;
+      
+      &.active {
+        background: rgba(175, 82, 222, 0.25);
+        border-color: #af52de;
+        font-weight: 700;
+        box-shadow: 0 0 10px rgba(175, 82, 222, 0.2);
+      }
+    }
+  }
+}
 
-    .log-table {
-      th {
-        color: #000000 !important;
+
+.light-theme {
+  .quick-filters {
+    .filter-chip {
+      // Ensure colors are visible in light mode
+      opacity: 1 !important;
+      font-weight: 600;
+      
+      // ALL button
+      &:first-child:not(.active) {
+        background: rgba(0, 0, 0, 0.05);
+        border-color: rgba(0, 0, 0, 0.15);
+        color: rgba(0, 0, 0, 0.6);
+      }
+      
+      &:first-child.active {
+        background: rgba(57, 255, 20, 0.2);
+        border-color: #39ff14;
+        color: #27ae60;
         font-weight: 700;
       }
-
-      td {
-        color: #000000 !important;
-        font-weight: 500;
+      
+      // ERROR chip in light mode
+      &.error-chip {
+        background: rgba(231, 76, 60, 0.15);
+        border-color: rgba(231, 76, 60, 0.3);
+        color: #c0392b;
+        
+        &.active {
+          background: rgba(231, 76, 60, 0.25);
+          border-color: #e74c3c;
+          color: #c0392b;
+          font-weight: 700;
+        }
       }
+      
+      // WARN chip in light mode  
+      &.warn-chip {
+        background: rgba(241, 196, 15, 0.15);
+        border-color: rgba(241, 196, 15, 0.3);
+        color: #f39c12;
+        
+        &.active {
+          background: rgba(241, 196, 15, 0.25);
+          border-color: #f1c40f;
+          color: #f39c12;
+          font-weight: 700;
+        }
+      }
+      
+      // INFO chip in light mode
+      &.info-chip {
+        background: rgba(52, 152, 219, 0.15);
+        border-color: rgba(52, 152, 219, 0.3);
+        color: #2980b9;
+        
+        &.active {
+          background: rgba(52, 152, 219, 0.25);
+          border-color: #3498db;
+          color: #2980b9;
+          font-weight: 700;
+        }
+      }
+      
+      // DEBUG chip in light mode
+      &.debug-chip {
+        background: rgba(155, 89, 182, 0.15);
+        border-color: rgba(155, 89, 182, 0.3);
+        color: #8e44ad;
+        
+        &.active {
+          background: rgba(155, 89, 182, 0.25);
+          border-color: #9b59b6;
+          color: #8e44ad;
+          font-weight: 700;
+        }
+      }
+      
+      // Remove any transparency override from light-theme-chip class
+      &.light-theme-chip {
+        // Don't apply generic styles, let the specific chip styles take precedence
+        background: inherit;
+        border-color: inherit;
+        color: inherit;
+      }
+    }
+  }
+}
 
-      tr:hover td {
-        color: #000000 !important;
-        font-weight: 600;
+// Dark theme - ensure it still looks good
+.dark-theme {
+  .quick-filters {
+    .filter-chip {
+      // Keep the vibrant colors in dark mode
+      opacity: 1;
+      
+      &.error-chip {
+        background: rgba(255, 59, 48, 0.2);
+        color: #ff3b30;
+      }
+      
+      &.warn-chip {
+        background: rgba(255, 204, 0, 0.2);
+        color: #ffcc00;
+      }
+      
+      &.info-chip {
+        background: rgba(0, 122, 255, 0.2);
+        color: #007aff;
+      }
+      
+      &.debug-chip {
+        background: rgba(175, 82, 222, 0.2);
+        color: #af52de;
       }
     }
   }

@@ -157,120 +157,319 @@ export class ErrorDataService {
   }
 
   // CORRECTED getChartData method
-  getChartData(): { trendData: ChartData; distributionData: ChartData } {
-    const logs = this.errorLogs();
+  // getChartData(): { trendData: ChartData; distributionData: ChartData } {
+  //   const logs = this.errorLogs();
     
-    // Group logs by time intervals for better visualization
-    const timeGroups = this.groupLogsByTimeInterval(logs);
+  //   // Group logs by time intervals for better visualization
+  //   const timeGroups = this.groupLogsByTimeInterval(logs);
     
-    // Access computed signals by calling them as functions
-    const errorCount = this.totalErrors();
-    const warningCount = this.totalWarnings();
-    const infoCount = this.totalInfo();
-    const debugCount = this.totalDebug();
+  //   // Access computed signals by calling them as functions
+  //   const errorCount = this.totalErrors();
+  //   const warningCount = this.totalWarnings();
+  //   const infoCount = this.totalInfo();
+  //   const debugCount = this.totalDebug();
     
-    return {
-      // STACKED LINE CHART DATA
-      trendData: {
-        labels: Object.keys(timeGroups).slice(0, 10), // Show last 10 time points
-        datasets: [
-          {
-            label: 'Errors',
-            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
-              group.filter((l: any) => l.log_level === 'ERROR').length
-            ),
-            borderColor: '#ff3b30',
-            backgroundColor: 'rgba(255, 59, 48, 0.3)',
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#ff3b30',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            stack: 'Stack 0'
-          },
-          {
-            label: 'Warnings',
-            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
-              group.filter((l: any) => l.log_level === 'WARN').length
-            ),
-            borderColor: '#ffcc00',
-            backgroundColor: 'rgba(255, 204, 0, 0.3)',
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#ffcc00',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            stack: 'Stack 0'
-          },
-          {
-            label: 'Info',
-            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
-              group.filter((l: any) => l.log_level === 'INFO').length
-            ),
-            borderColor: '#007aff',
-            backgroundColor: 'rgba(0, 122, 255, 0.3)',
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#007aff',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            stack: 'Stack 0'
-          },
-          {
-            label: 'Debug',
-            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
-              group.filter((l: any) => l.log_level === 'DEBUG').length
-            ),
-            borderColor: '#af52de',
-            backgroundColor: 'rgba(175, 82, 222, 0.3)',
-            fill: true,
-            tension: 0.3,
-            pointBackgroundColor: '#af52de',
-            pointBorderColor: '#fff',
-            pointBorderWidth: 2,
-            pointRadius: 4,
-            pointHoverRadius: 6,
-            stack: 'Stack 0'
-          }
-        ]
-      } as ChartData,
+  //   return {
+  //     // STACKED LINE CHART DATA
+  //     trendData: {
+  //       labels: Object.keys(timeGroups).slice(0, 10), // Show last 10 time points
+  //       datasets: [
+  //         {
+  //           label: 'Errors',
+  //           data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+  //             group.filter((l: any) => l.log_level === 'ERROR').length
+  //           ),
+  //           borderColor: '#ff3b30',
+  //           backgroundColor: 'rgba(255, 59, 48, 0.3)',
+  //           fill: true,
+  //           tension: 0.3,
+  //           pointBackgroundColor: '#ff3b30',
+  //           pointBorderColor: '#fff',
+  //           pointBorderWidth: 2,
+  //           pointRadius: 4,
+  //           pointHoverRadius: 6,
+  //           stack: 'Stack 0'
+  //         },
+  //         {
+  //           label: 'Warnings',
+  //           data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+  //             group.filter((l: any) => l.log_level === 'WARN').length
+  //           ),
+  //           borderColor: '#ffcc00',
+  //           backgroundColor: 'rgba(255, 204, 0, 0.3)',
+  //           fill: true,
+  //           tension: 0.3,
+  //           pointBackgroundColor: '#ffcc00',
+  //           pointBorderColor: '#fff',
+  //           pointBorderWidth: 2,
+  //           pointRadius: 4,
+  //           pointHoverRadius: 6,
+  //           stack: 'Stack 0'
+  //         },
+  //         {
+  //           label: 'Info',
+  //           data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+  //             group.filter((l: any) => l.log_level === 'INFO').length
+  //           ),
+  //           borderColor: '#007aff',
+  //           backgroundColor: 'rgba(0, 122, 255, 0.3)',
+  //           fill: true,
+  //           tension: 0.3,
+  //           pointBackgroundColor: '#007aff',
+  //           pointBorderColor: '#fff',
+  //           pointBorderWidth: 2,
+  //           pointRadius: 4,
+  //           pointHoverRadius: 6,
+  //           stack: 'Stack 0'
+  //         },
+  //         {
+  //           label: 'Debug',
+  //           data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+  //             group.filter((l: any) => l.log_level === 'DEBUG').length
+  //           ),
+  //           borderColor: '#af52de',
+  //           backgroundColor: 'rgba(175, 82, 222, 0.3)',
+  //           fill: true,
+  //           tension: 0.3,
+  //           pointBackgroundColor: '#af52de',
+  //           pointBorderColor: '#fff',
+  //           pointBorderWidth: 2,
+  //           pointRadius: 4,
+  //           pointHoverRadius: 6,
+  //           stack: 'Stack 0'
+  //         }
+  //       ]
+  //     } as ChartData,
       
-      // DOUGHNUT CHART DATA - CORRECTED
-      distributionData: {
-        labels: ['ERROR', 'WARN', 'INFO', 'DEBUG'],
-        datasets: [{
-          label: 'Distribution',
-          data: [
-            errorCount,      // Use the variables we created above
-            warningCount,    // Not this.totalWarnings()
-            infoCount,       // Not this.totalInfo()
-            debugCount       // Not this.totalDebug()
-          ],
-          backgroundColor: [
-            'rgba(255, 59, 48, 0.7)',
-            'rgba(255, 204, 0, 0.7)',
-            'rgba(0, 122, 255, 0.7)',
-            'rgba(175, 82, 222, 0.7)'
-          ],
-          borderColor: [
-            '#ff3b30',
-            '#ffcc00',
-            '#007aff',
-            '#af52de'
-          ],
-          borderWidth: 2,
-          hoverOffset: 4
-        }]
-      } as ChartData
-    };
-  }
+  //     // DOUGHNUT CHART DATA - CORRECTED
+  //     distributionData: {
+  //       labels: ['ERROR', 'WARN', 'INFO', 'DEBUG'],
+  //       datasets: [{
+  //         label: 'Distribution',
+  //         data: [
+  //           errorCount,      // Use the variables we created above
+  //           warningCount,    // Not this.totalWarnings()
+  //           infoCount,       // Not this.totalInfo()
+  //           debugCount       // Not this.totalDebug()
+  //         ],
+  //         backgroundColor: [
+  //           'rgba(255, 59, 48, 0.7)',
+  //           'rgba(255, 204, 0, 0.7)',
+  //           'rgba(0, 122, 255, 0.7)',
+  //           'rgba(175, 82, 222, 0.7)'
+  //         ],
+  //         borderColor: [
+  //           '#ff3b30',
+  //           '#ffcc00',
+  //           '#007aff',
+  //           '#af52de'
+  //         ],
+  //         borderWidth: 2,
+  //         hoverOffset: 4
+  //       }]
+  //     } as ChartData
+  //   };
+  // }
 
+//   getChartData(): { trendData: ChartData; distributionData: ChartData } {
+//   const logs = this.errorLogs();
+  
+//   // Group logs by time intervals
+//   const timeGroups = this.groupLogsByTimeInterval(logs);
+//   const timeLabels = Object.keys(timeGroups).slice(0, 7); // Show 7 time points
+  
+//   // Calculate counts for each log type at each time point
+//   const errorCounts: number[] = [];
+//   const warnCounts: number[] = [];
+//   const infoCounts: number[] = [];
+//   const debugCounts: number[] = [];
+  
+//   timeLabels.forEach((time) => {
+//     const group = timeGroups[time] || [];
+//     errorCounts.push(group.filter((l: any) => l.log_level === 'ERROR').length);
+//     warnCounts.push(group.filter((l: any) => l.log_level === 'WARN').length);
+//     infoCounts.push(group.filter((l: any) => l.log_level === 'INFO').length);
+//     debugCounts.push(group.filter((l: any) => l.log_level === 'DEBUG').length);
+//   });
+  
+//   return {
+//     // VERTICAL GROUPED BAR CHART DATA
+//     trendData: {
+//       labels: timeLabels,
+//       datasets: [
+//         {
+//           label: 'Errors',
+//           data: errorCounts,
+//           backgroundColor: 'rgba(255, 59, 48, 0.7)',
+//           borderColor: '#ff3b30',
+//           borderWidth: 2,
+//           borderRadius: 4,
+//           barPercentage: 0.8,
+//           categoryPercentage: 0.9
+//         },
+//         {
+//           label: 'Warnings',
+//           data: warnCounts,
+//           backgroundColor: 'rgba(255, 204, 0, 0.7)',
+//           borderColor: '#ffcc00',
+//           borderWidth: 2,
+//           borderRadius: 4,
+//           barPercentage: 0.8,
+//           categoryPercentage: 0.9
+//         },
+//         {
+//           label: 'Info',
+//           data: infoCounts,
+//           backgroundColor: 'rgba(0, 122, 255, 0.7)',
+//           borderColor: '#007aff',
+//           borderWidth: 2,
+//           borderRadius: 4,
+//           barPercentage: 0.8,
+//           categoryPercentage: 0.9
+//         },
+//         {
+//           label: 'Debug',
+//           data: debugCounts,
+//           backgroundColor: 'rgba(175, 82, 222, 0.7)',
+//           borderColor: '#af52de',
+//           borderWidth: 2,
+//           borderRadius: 4,
+//           barPercentage: 0.8,
+//           categoryPercentage: 0.9
+//         }
+//       ]
+//     } as ChartData<'bar'>,
+    
+//     // Distribution chart remains the same
+//     distributionData: {
+//       labels: ['ERROR', 'WARN', 'INFO', 'DEBUG'],
+//       datasets: [{
+//         label: 'Distribution',
+//         data: [
+//           this.totalErrors(),
+//           this.totalWarnings(),
+//           this.totalInfo(),
+//           this.totalDebug()
+//         ],
+//         backgroundColor: [
+//           'rgba(255, 59, 48, 0.7)',
+//           'rgba(255, 204, 0, 0.7)',
+//           'rgba(0, 122, 255, 0.7)',
+//           'rgba(175, 82, 222, 0.7)'
+//         ],
+//         borderColor: [
+//           '#ff3b30',
+//           '#ffcc00',
+//           '#007aff',
+//           '#af52de'
+//         ],
+//         borderWidth: 2,
+//         hoverOffset: 4
+//       }]
+//     } as ChartData<'doughnut'>
+//   };
+// }
+getChartData(): { trendData: ChartData; distributionData: ChartData } {
+  const logs = this.errorLogs();
+  
+  // Group logs by time intervals
+  const timeGroups = this.groupLogsByTimeInterval(logs);
+  const timeLabels = Object.keys(timeGroups).slice(0, 7);
+  
+  // Calculate counts for each log type
+  const errorCounts: number[] = [];
+  const warnCounts: number[] = [];
+  const infoCounts: number[] = [];
+  const debugCounts: number[] = [];
+  
+  timeLabels.forEach((time) => {
+    const group = timeGroups[time] || [];
+    errorCounts.push(group.filter((l: any) => l.log_level === 'ERROR').length);
+    warnCounts.push(group.filter((l: any) => l.log_level === 'WARN').length);
+    infoCounts.push(group.filter((l: any) => l.log_level === 'INFO').length);
+    debugCounts.push(group.filter((l: any) => l.log_level === 'DEBUG').length);
+  });
+  
+  return {
+    trendData: {
+      labels: timeLabels,
+      datasets: [
+        {
+          label: 'Errors',
+          data: errorCounts,
+          backgroundColor: 'rgba(255, 59, 48, 0.7)',
+          borderColor: '#ff3b30',
+          borderWidth: 2,
+          borderRadius: 4,
+          barPercentage: 0.4,        // REDUCED from 0.8 to 0.4 (makes bars 50% thinner)
+          categoryPercentage: 0.6,    // REDUCED from 0.9 to 0.6 (adds more space between groups)
+          maxBarThickness: 30         // Maximum bar width in pixels
+        },
+        {
+          label: 'Warnings',
+          data: warnCounts,
+          backgroundColor: 'rgba(255, 204, 0, 0.7)',
+          borderColor: '#ffcc00',
+          borderWidth: 2,
+          borderRadius: 4,
+          barPercentage: 0.4,        // REDUCED
+          categoryPercentage: 0.6,    // REDUCED
+          maxBarThickness: 30
+        },
+        {
+          label: 'Info',
+          data: infoCounts,
+          backgroundColor: 'rgba(0, 122, 255, 0.7)',
+          borderColor: '#007aff',
+          borderWidth: 2,
+          borderRadius: 4,
+          barPercentage: 0.4,        // REDUCED
+          categoryPercentage: 0.6,    // REDUCED
+          maxBarThickness: 30
+        },
+        {
+          label: 'Debug',
+          data: debugCounts,
+          backgroundColor: 'rgba(175, 82, 222, 0.7)',
+          borderColor: '#af52de',
+          borderWidth: 2,
+          borderRadius: 4,
+          barPercentage: 0.4,        // REDUCED
+          categoryPercentage: 0.6,    // REDUCED
+          maxBarThickness: 30
+        }
+      ]
+    } as ChartData<'bar'>,
+    
+    // Distribution chart remains unchanged
+    distributionData: {
+      labels: ['ERROR', 'WARN', 'INFO', 'DEBUG'],
+      datasets: [{
+        label: 'Distribution',
+        data: [
+          this.totalErrors(),
+          this.totalWarnings(),
+          this.totalInfo(),
+          this.totalDebug()
+        ],
+        backgroundColor: [
+          'rgba(255, 59, 48, 0.7)',
+          'rgba(255, 204, 0, 0.7)',
+          'rgba(0, 122, 255, 0.7)',
+          'rgba(175, 82, 222, 0.7)'
+        ],
+        borderColor: [
+          '#ff3b30',
+          '#ffcc00',
+          '#007aff',
+          '#af52de'
+        ],
+        borderWidth: 2,
+        hoverOffset: 4
+      }]
+    } as ChartData<'doughnut'>
+  };
+}
   private groupLogsByTimeInterval(logs: any[]): { [key: string]: any[] } {
     const grouped: { [key: string]: any[] } = {};
     
