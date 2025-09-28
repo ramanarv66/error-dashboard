@@ -9,5 +9,6 @@ export interface ErrorLog {
   date: string;
   time: string;
   log_level: 'ERROR' | 'WARN' | 'INFO' | 'DEBUG';
+  thread_id: string;
   message: string;
 }

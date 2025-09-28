@@ -8,8 +8,7 @@ import { HttpClient, HttpClientModule, HttpHeaders } from '@angular/common/http'
   imports: [CommonModule, HttpClientModule],
   template: `
     <div class="header">
-      <h1 class="header-title">Quantum Error Monitor</h1>
-      <button type="button" (click)="sendLogFromAssets()">upload</button>
+      <h1 class="header-title"> Error Logs Monitor</h1>
       <div class="header-subtitle">
         REAL-TIME SYSTEM DIAGNOSTICS | {{ currentTime }}
       </div>

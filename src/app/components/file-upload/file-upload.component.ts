@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { ErrorDataService } from '../../services/error-data.service';
 import { environment } from '../../../environments/environment';
+import { catchError, of, timeout } from 'rxjs';
 
 @Component({
   selector: 'app-file-upload',
@@ -297,23 +298,38 @@ export class FileUploadComponent {
     this.http.post<any>(webhookUrl, fileContent, { 
       headers,
       responseType: 'json' as 'json'
-    }).subscribe({
+    })
+    .pipe(
+  timeout(300000), // 5 minutes timeout (300,000 ms)
+  catchError(error => {
+    console.error('Request timeout or error:', error);
+    this.uploading = false;
+    this.uploadStatus = {
+      type: 'error',
+      message: error.name === 'TimeoutError' ? 'Request timed out. Please try again.' : 'Request failed. Please try again.'
+    };
+    return of(null); // Return null to handle gracefully
+  })
+)
+    .subscribe({
       next: (response: any) => {
         console.log('N8N Response:', response);
+
         this.uploading = false;
         
         // Handle the array response directly
-        if (Array.isArray(response.data)) {
+        if (response && response.data && Array.isArray(response.data)) {
           // Process the logs
-          this.processLogs(response.data);
+          const logs = response.data;
+          this.processLogs(logs);
           
           this.uploadStatus = {
             type: 'success',
-            message: `Successfully processed ${response.data.length} log entries from ${this.selectedFile?.name}`
+            message: `Successfully processed ${logs.length} log entries from ${this.selectedFile?.name}`
           };
           
           // Calculate summary
-          this.calculateSummary(response.data);
+          this.calculateSummary(logs);
           
           // Emit event to refresh dashboard
           this.logsUploaded.emit();

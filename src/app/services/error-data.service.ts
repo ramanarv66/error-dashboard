@@ -13,7 +13,6 @@ import {
 } from 'rxjs/operators';
 import { ErrorLog } from '../models/error-log.model';
 import { StatCard } from '../models/stats.model';
-import { N8NApiResponse } from '../models/n8n-response.model';
 import { ChartData } from 'chart.js';
 import { environment } from '../../environments/environment';
 
@@ -22,7 +21,7 @@ import { environment } from '../../environments/environment';
 })
 export class ErrorDataService {
   private readonly apiUrl = environment.n8nWebhookUrl;
-  private readonly refreshInterval = environment.refreshInterval;
+  private readonly refreshInterval = environment.refreshInterval || 30000;
   private destroy$ = new Subject<void>();
   private http = inject(HttpClient);
 
@@ -39,7 +38,7 @@ export class ErrorDataService {
   private newErrorCount = new BehaviorSubject<number>(0);
   private autoRefresh$ = new BehaviorSubject<boolean>(true);
   
-  // Computed signals remain the same...
+  // Computed signals for reactive calculations
   readonly totalErrors = computed(() => {
     const logs = this.errorLogs();
     return logs.filter(log => log.log_level === 'ERROR').length;
@@ -68,23 +67,18 @@ export class ErrorDataService {
   });
 
   constructor() {
-    // Initialize with empty data
     this.initializeEmptyState();
-    
-    // Set up auto-refresh if enabled
     if (environment.enableRealTimeUpdates) {
       this.setupAutoRefresh();
     }
   }
 
   private initializeEmptyState(): void {
-    // Start with empty state, waiting for file upload
     this.errorLogs.set([]);
     this.lastUpdateTime.set(null);
   }
 
   private setupAutoRefresh(): void {
-    // Auto-refresh logic remains the same
     this.autoRefresh$
       .pipe(
         switchMap(shouldRefresh => 
@@ -94,117 +88,58 @@ export class ErrorDataService {
       )
       .subscribe(() => {
         if (this.autoRefresh$.value && this.errorLogs().length > 0) {
-          // Only refresh if we have data
           this.refreshData();
         }
       });
   }
-    getNewErrorCount(): Observable<number> {
-    return this.newErrorCount.asObservable();
-  }
 
-  /**
-   * Process logs from file upload
-   */
   processUploadedLogs(responseData: any): void {
-    // Parse the response based on N8N webhook response format
     if (responseData && Array.isArray(responseData)) {
       const parsedLogs = this.parseLogData(responseData);
       
-      // Store previous logs for trend calculation
       this.previousLogs.set(this.errorLogs());
-      
-      // Update signals with new data
       this.errorLogs.set(parsedLogs);
       this.lastUpdateTime.set(new Date());
       
-      // Check for new errors
       this.checkForNewErrors(parsedLogs);
     }
   }
 
-  /**
-   * Parse log data from N8N response
-   */
   private parseLogData(data: any[]): ErrorLog[] {
     return data.map((item, index) => ({
       id: index + 1,
       date: item.date,
       time: item.time,
+      thread_id: item.thread_id,
       log_level: item.log_level as 'ERROR' | 'WARN' | 'INFO' | 'DEBUG',
       message: item.message
     }));
   }
 
-  /**
-   * Parse raw log file content (for direct text parsing if needed)
-   */
-  parseRawLogContent(content: string): ErrorLog[] {
-    const lines = content.split('\n').filter(line => line.trim());
-    const logs: ErrorLog[] = [];
-    
-    lines.forEach((line, index) => {
-      // Parse Java log format: 2025-08-21 14:01:33,511 [thread] LEVEL package - message
-      const logPattern = /^(\d{4}-\d{2}-\d{2})\s+(\d{2}:\d{2}:\d{2},\d{3})\s+\[([^\]]+)\]\s+(DEBUG|INFO|WARN|ERROR)\s+(.+)$/;
-      const match = line.match(logPattern);
-      
-      if (match) {
-        logs.push({
-          id: index + 1,
-          date: match[1],
-          time: match[2],
-          log_level: match[4] as 'ERROR' | 'WARN' | 'INFO' | 'DEBUG',
-          message: match[5]
-        });
-      }
-    });
-    
-    return logs;
-  }
-
-  /**
-   * Upload log file content to N8N
-   */
-  uploadLogContent(content: string): Observable<any> {
-    this.loading.set(true);
-    this.error.set(null);
-
-    const headers = new HttpHeaders({
-      'Content-Type': 'text/plain',
-      'Accept': '*/*'
-    });
-
-    return this.http.post(this.apiUrl, content, { headers })
-      .pipe(
-        map(response => {
-          this.loading.set(false);
-          return response;
-        }),
-        catchError(this.handleError.bind(this)),
-        finalize(() => this.loading.set(false))
-      );
-  }
-
-  // Other methods remain the same...
   getErrorLogs(): ErrorLog[] {
     return this.errorLogs();
   }
 
   getStats(): StatCard[] {
+    // Access computed signals by calling them as functions
+    const errorCount = this.totalErrors();
+    const warningCount = this.totalWarnings();
+    const infoCount = this.totalInfo();
+    const debugCount = this.totalDebug();
     const systemHealthValue = this.systemHealth();
     
     return [
       {
         label: 'Total Errors',
-        value: this.totalErrors(),
+        value: errorCount,
         trend: this.errorLogs().length > 0 ? 'Monitoring active' : 'Upload file to start',
-        trendDirection: this.totalErrors() > 0 ? 'down' : 'neutral'
+        trendDirection: errorCount > 0 ? 'down' : 'neutral'
       },
       {
         label: 'Warnings',
-        value: this.totalWarnings(),
+        value: warningCount,
         trend: this.errorLogs().length > 0 ? 'System warnings' : 'No data',
-        trendDirection: this.totalWarnings() > 0 ? 'down' : 'neutral'
+        trendDirection: warningCount > 0 ? 'down' : 'neutral'
       },
       {
         label: 'Total Logs',
@@ -221,55 +156,101 @@ export class ErrorDataService {
     ];
   }
 
+  // CORRECTED getChartData method
   getChartData(): { trendData: ChartData; distributionData: ChartData } {
-    // Group logs by time for trend chart
-    const timeGroups = this.groupLogsByTime();
+    const logs = this.errorLogs();
+    
+    // Group logs by time intervals for better visualization
+    const timeGroups = this.groupLogsByTimeInterval(logs);
+    
+    // Access computed signals by calling them as functions
+    const errorCount = this.totalErrors();
+    const warningCount = this.totalWarnings();
+    const infoCount = this.totalInfo();
+    const debugCount = this.totalDebug();
     
     return {
+      // STACKED LINE CHART DATA
       trendData: {
-        labels: Object.keys(timeGroups).slice(0, 7), // Show last 7 time points
+        labels: Object.keys(timeGroups).slice(0, 10), // Show last 10 time points
         datasets: [
           {
             label: 'Errors',
-            data: Object.values(timeGroups).slice(0, 7).map(logs => 
-              logs.filter(l => l.log_level === 'ERROR').length
+            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+              group.filter((l: any) => l.log_level === 'ERROR').length
             ),
             borderColor: '#ff3b30',
-            backgroundColor: 'rgba(255, 59, 48, 0.1)',
-            tension: 0.4,
-            fill: true
+            backgroundColor: 'rgba(255, 59, 48, 0.3)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#ff3b30',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            stack: 'Stack 0'
           },
           {
             label: 'Warnings',
-            data: Object.values(timeGroups).slice(0, 7).map(logs => 
-              logs.filter(l => l.log_level === 'WARN').length
+            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+              group.filter((l: any) => l.log_level === 'WARN').length
             ),
             borderColor: '#ffcc00',
-            backgroundColor: 'rgba(255, 204, 0, 0.1)',
-            tension: 0.4,
-            fill: true
+            backgroundColor: 'rgba(255, 204, 0, 0.3)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#ffcc00',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            stack: 'Stack 0'
           },
           {
             label: 'Info',
-            data: Object.values(timeGroups).slice(0, 7).map(logs => 
-              logs.filter(l => l.log_level === 'INFO').length
+            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+              group.filter((l: any) => l.log_level === 'INFO').length
             ),
             borderColor: '#007aff',
-            backgroundColor: 'rgba(0, 122, 255, 0.1)',
-            tension: 0.4,
-            fill: true
+            backgroundColor: 'rgba(0, 122, 255, 0.3)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#007aff',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            stack: 'Stack 0'
+          },
+          {
+            label: 'Debug',
+            data: Object.values(timeGroups).slice(0, 10).map((group: any) => 
+              group.filter((l: any) => l.log_level === 'DEBUG').length
+            ),
+            borderColor: '#af52de',
+            backgroundColor: 'rgba(175, 82, 222, 0.3)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#af52de',
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+            stack: 'Stack 0'
           }
         ]
       } as ChartData,
+      
+      // DOUGHNUT CHART DATA - CORRECTED
       distributionData: {
         labels: ['ERROR', 'WARN', 'INFO', 'DEBUG'],
         datasets: [{
           label: 'Distribution',
           data: [
-            this.totalErrors(),
-            this.totalWarnings(),
-            this.totalInfo(),
-            this.totalDebug()
+            errorCount,      // Use the variables we created above
+            warningCount,    // Not this.totalWarnings()
+            infoCount,       // Not this.totalInfo()
+            debugCount       // Not this.totalDebug()
           ],
           backgroundColor: [
             'rgba(255, 59, 48, 0.7)',
@@ -283,24 +264,43 @@ export class ErrorDataService {
             '#007aff',
             '#af52de'
           ],
-          borderWidth: 2
+          borderWidth: 2,
+          hoverOffset: 4
         }]
       } as ChartData
     };
   }
 
-  private groupLogsByTime(): { [time: string]: ErrorLog[] } {
-    const grouped: { [time: string]: ErrorLog[] } = {};
+  private groupLogsByTimeInterval(logs: any[]): { [key: string]: any[] } {
+    const grouped: { [key: string]: any[] } = {};
     
-    this.errorLogs().forEach(log => {
-      const timeKey = log.time.substring(0, 8); // Group by HH:MM:SS
+    logs.forEach(log => {
+      // Group by seconds (you can adjust the grouping logic)
+      const timeKey = log.time ? log.time.substring(0, 8) : 'unknown'; // HH:MM:SS
+      
       if (!grouped[timeKey]) {
         grouped[timeKey] = [];
       }
       grouped[timeKey].push(log);
     });
     
-    return grouped;
+    // If no logs, create sample time points
+    if (Object.keys(grouped).length === 0) {
+      const now = new Date();
+      for (let i = 0; i < 10; i++) {
+        const time = new Date(now.getTime() - i * 60000); // Go back in 1-minute intervals
+        const timeKey = time.toTimeString().substring(0, 8);
+        grouped[timeKey] = [];
+      }
+    }
+    
+    // Sort by time and return
+    return Object.keys(grouped)
+      .sort()
+      .reduce((acc: any, key) => {
+        acc[key] = grouped[key];
+        return acc;
+      }, {});
   }
 
   private checkForNewErrors(logs: ErrorLog[]): void {
@@ -312,39 +312,12 @@ export class ErrorDataService {
     }
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'An error occurred while uploading the file';
-    
-    if (error.error instanceof ErrorEvent) {
-      errorMessage = `Error: ${error.error.message}`;
-    } else {
-      switch (error.status) {
-        case 0:
-          errorMessage = 'Unable to connect to N8N webhook. Please check CORS settings.';
-          break;
-        case 400:
-          errorMessage = 'Invalid file format or content.';
-          break;
-        case 413:
-          errorMessage = 'File is too large. Please upload a smaller file.';
-          break;
-        case 500:
-          errorMessage = 'N8N webhook error. Please check your workflow.';
-          break;
-        default:
-          errorMessage = `Upload error: ${error.status} - ${error.message}`;
-      }
-    }
-    
-    this.error.set(errorMessage);
-    console.error('Upload Error:', errorMessage, error);
-    return throwError(() => new Error(errorMessage));
+  getNewErrorCount(): Observable<number> {
+    return this.newErrorCount.asObservable();
   }
 
   refreshData(): void {
-    // Refresh only if we have data
     if (this.errorLogs().length > 0) {
-      // Re-process current logs or fetch new ones
       this.lastUpdateTime.set(new Date());
     }
   }
