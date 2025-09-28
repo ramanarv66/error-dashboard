@@ -1,22 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { ThemeService } from './services/theme.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [RouterOutlet, DashboardComponent],
   template: `
-    <app-dashboard></app-dashboard>
-    <router-outlet></router-outlet>
+    <div class="app-container" [attr.data-theme]="currentTheme()">
+      <app-dashboard></app-dashboard>
+      <router-outlet></router-outlet>
+    </div>
   `,
-  styleUrls: ['./app.component.scss']
+  styles: [`
+    .app-container {
+      min-height: 100vh;
+      transition: all 0.3s ease;
+    }
+  `]
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'error-dashboard';
+  private themeService = inject(ThemeService);
+  currentTheme = this.themeService.currentTheme;
 
-  uplodFile(){
-    console.log('upload file');
-    
+  ngOnInit() {
+    // Theme is automatically initialized in the service
+    console.log('App initialized with theme:', this.currentTheme());
   }
 }

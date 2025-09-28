@@ -1,17 +1,17 @@
-import { Component, OnInit, OnDestroy, effect } from '@angular/core';
+import { Component, OnInit, OnDestroy, effect, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from '../header/header.component';
 import { StatsCardComponent } from '../stats-card/stats-card.component';
 import { ErrorChartComponent } from '../error-chart/error-chart.component';
 import { ErrorLogTableComponent } from '../error-log-table/error-log-table.component';
-// import { LoadingSpinnerComponent } from '../loading-spinner/loading-spinner.component';
-// import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { FileUploadComponent } from '../file-upload/file-upload.component';
+import { ThemeToggleComponent } from '../theme-toggle/theme-toggle.component';
 import { ErrorDataService } from '../../services/error-data.service';
+import { ThemeService } from '../../services/theme.service';
+
 import { StatCard } from '../../models/stats.model';
 import { ErrorLog } from '../../models/error-log.model';
 import { Subject, takeUntil } from 'rxjs';
-
 @Component({
   selector: 'app-dashboard',
   standalone: true,
@@ -21,12 +21,17 @@ import { Subject, takeUntil } from 'rxjs';
     StatsCardComponent,
     ErrorChartComponent,
     ErrorLogTableComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    ThemeToggleComponent
   ],
   template: `
     <div class="dashboard-wrapper">
       <!-- Loading bar animation -->
       <div class="loading-bar" *ngIf="loading()"></div>
+       <!-- Theme Toggle Button (Fixed Position) -->
+      <div class="theme-toggle-fixed">
+        <app-theme-toggle></app-theme-toggle>
+      </div>
       
       <div class="dashboard-container">
         <!-- Header Section -->
@@ -79,18 +84,21 @@ import { Subject, takeUntil } from 'rxjs';
 
           <!-- Charts Grid -->
           <div class="charts-grid">
-            <app-error-chart
-              title="Error Trend Analysis"
-              chartType="line"
-              [chartData]="trendChartData">
-            </app-error-chart>
-            
-            <app-error-chart
-              title="Error Type Distribution"
-              chartType="doughnut"
-              [chartData]="distributionChartData">
-            </app-error-chart>
-          </div>
+      <!-- Stacked Line Chart -->
+      <app-error-chart
+        title="Error Trend Analysis - Stacked View"
+        chartType="bar"
+        [chartData]="trendChartData"
+        [isStacked]="true">
+      </app-error-chart>
+      
+      <!-- Distribution Doughnut Chart -->
+      <app-error-chart
+        title="Error Type Distribution"
+        chartType="doughnut"
+        [chartData]="distributionChartData">
+      </app-error-chart>
+    </div>
 
           <!-- Error Log Table -->
           <app-error-log-table 

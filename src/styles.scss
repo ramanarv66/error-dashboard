@@ -4,30 +4,528 @@
   box-sizing: border-box;
 }
 
+// Base variables that don't change
+:root {
+  --neon-primary: #39ff14;
+  --neon-primary-rgb: 57, 255, 20;
+  --transition-speed: 0.3s;
+}
+
+// ============================================
+// DARK THEME STYLES
+// ============================================
+html.dark-theme,
+body.dark-theme,
+.dark-theme {
+  // Backgrounds
+  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%);
+  color: #ffffff;
+  
+  // All dark theme styles
+  .header {
+    background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(255, 255, 255, 0.05));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(57, 255, 20, 0.3);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.3);
+    
+    .header-subtitle {
+      color: rgba(57, 255, 20, 0.8);
+    }
+  }
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    
+    &:hover {
+      border-color: rgba(57, 255, 20, 0.5);
+      box-shadow: 0 20px 40px rgba(57, 255, 20, 0.2);
+    }
+    
+    .stat-label {
+      color: rgba(255, 255, 255, 0.6);
+    }
+    
+    .stat-trend {
+      color: rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  .chart-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
+    &:hover {
+      box-shadow: 0 0 40px rgba(57, 255, 20, 0.3);
+      border-color: rgba(57, 255, 20, 0.4);
+    }
+  }
+
+  .log-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
+    .table-wrapper {
+      background: rgba(0, 0, 0, 0.2);
+    }
+    
+    .log-table {
+      th {
+        background: rgba(57, 255, 20, 0.1);
+        color: #39ff14;
+        border-bottom: 2px solid rgba(57, 255, 20, 0.3);
+      }
+      
+      td {
+        color: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      
+      tr:hover {
+        background: rgba(57, 255, 20, 0.05);
+        
+        td {
+          color: rgba(255, 255, 255, 0.95);
+        }
+      }
+    }
+  }
+
+  .controls-bar {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
+    .toggle-label {
+      color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .last-update {
+      color: rgba(57, 255, 20, 0.8);
+    }
+    
+    .toggle-slider {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(57, 255, 20, 0.3);
+    }
+  }
+
+  .upload-container {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
+    &:hover {
+      border-color: rgba(57, 255, 20, 0.3);
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.1);
+    }
+    
+    .file-name {
+      color: #39ff14;
+    }
+    
+    .file-size {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  .no-data-message {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    
+    p {
+      color: rgba(255, 255, 255, 0.6);
+    }
+  }
+
+  .fab {
+    background: linear-gradient(135deg, #39ff14, rgba(57, 255, 20, 0.7));
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    
+    .fab-icon {
+      color: #0a0e27;
+    }
+  }
+
+  // Error type badges
+  .error-type, .log-level {
+    &.error {
+      background: rgba(255, 59, 48, 0.2);
+      color: #ff3b30;
+      border: 1px solid rgba(255, 59, 48, 0.3);
+    }
+    
+    &.warn {
+      background: rgba(255, 204, 0, 0.2);
+      color: #ffcc00;
+      border: 1px solid rgba(255, 204, 0, 0.3);
+    }
+    
+    &.info {
+      background: rgba(0, 122, 255, 0.2);
+      color: #007aff;
+      border: 1px solid rgba(0, 122, 255, 0.3);
+    }
+    
+    &.debug {
+      background: rgba(175, 82, 222, 0.2);
+      color: #af52de;
+      border: 1px solid rgba(175, 82, 222, 0.3);
+    }
+  }
+}
+
+// ============================================
+// LIGHT THEME STYLES
+// ============================================
+html.light-theme,
+body.light-theme,
+.light-theme {
+  // Backgrounds
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 50%, #ffffff 100%);
+  color: #2c3e50;
+  
+  // All light theme styles
+  .header {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(57, 255, 20, 0.2);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    
+    .header-subtitle {
+      color: #2c3e50;
+      opacity: 0.8;
+    }
+  }
+
+  .stat-card {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(57, 255, 20, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+      border-color: rgba(57, 255, 20, 0.3);
+      box-shadow: 0 15px 40px rgba(57, 255, 20, 0.15);
+    }
+    
+    .stat-label {
+      color: #7f8c8d;
+    }
+    
+    .stat-trend {
+      color: #95a5a6;
+    }
+  }
+
+  .chart-container {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(57, 255, 20, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+      box-shadow: 0 10px 40px rgba(57, 255, 20, 0.1);
+      border-color: rgba(57, 255, 20, 0.25);
+    }
+  }
+
+  .log-container {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(57, 255, 20, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    
+    .table-wrapper {
+      background: rgba(248, 249, 250, 0.5);
+      border: 1px solid rgba(57, 255, 20, 0.1);
+    }
+    
+    .log-table {
+      th {
+        background: linear-gradient(135deg, rgba(57, 255, 20, 0.1), rgba(46, 204, 113, 0.1));
+        color: #2c3e50;
+        border-bottom: 2px solid rgba(57, 255, 20, 0.2);
+      }
+      
+      td {
+        color: #34495e;
+        border-bottom: 1px solid rgba(189, 195, 199, 0.2);
+        background: rgba(255, 255, 255, 0.5);
+      }
+      
+      tr:hover {
+        background: rgba(57, 255, 20, 0.05);
+        
+        td {
+          color: #2c3e50;
+          background: rgba(57, 255, 20, 0.03);
+        }
+      }
+    }
+  }
+
+  .controls-bar {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(57, 255, 20, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    
+    .toggle-label {
+      color: #34495e;
+    }
+    
+    .last-update {
+      color: #27ae60;
+    }
+    
+    .toggle-slider {
+      background: rgba(189, 195, 199, 0.3);
+      border: 1px solid rgba(189, 195, 199, 0.3);
+    }
+  }
+
+  .upload-container {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(57, 255, 20, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    
+    &:hover {
+      border-color: rgba(57, 255, 20, 0.25);
+      box-shadow: 0 8px 25px rgba(57, 255, 20, 0.1);
+    }
+    
+    .file-name {
+      color: #39ff14;
+    }
+    
+    .file-size {
+      color: rgba(0, 0, 0, 0.6);
+    }
+    
+    .upload-button {
+      background: linear-gradient(135deg, #39ff14, rgba(46, 204, 113, 0.9));
+      color: #ffffff;
+    }
+  }
+
+  .no-data-message {
+    background: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(57, 255, 20, 0.15);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    
+    p {
+      color: #7f8c8d;
+    }
+  }
+
+  .fab {
+    background: linear-gradient(135deg, #39ff14, rgba(46, 204, 113, 0.9));
+    box-shadow: 0 10px 30px rgba(57, 255, 20, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.9);
+    
+    .fab-icon {
+      color: #ffffff;
+    }
+  }
+
+  // Error type badges
+  .error-type, .log-level {
+    &.error {
+      background: rgba(231, 76, 60, 0.15);
+      color: #c0392b;
+      border: 1px solid rgba(231, 76, 60, 0.3);
+    }
+    
+    &.warn {
+      background: rgba(241, 196, 15, 0.15);
+      color: #f39c12;
+      border: 1px solid rgba(241, 196, 15, 0.3);
+    }
+    
+    &.info {
+      background: rgba(52, 152, 219, 0.15);
+      color: #2980b9;
+      border: 1px solid rgba(52, 152, 219, 0.3);
+    }
+    
+    &.debug {
+      background: rgba(155, 89, 182, 0.15);
+      color: #8e44ad;
+      border: 1px solid rgba(155, 89, 182, 0.3);
+    }
+  }
+}
+
+// ============================================
+// SHARED STYLES (work in both themes)
+// ============================================
 body {
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #0f172a 100%);
   min-height: 100vh;
-  color: #ffffff;
   overflow-x: hidden;
   position: relative;
+  transition: background 0.3s ease, color 0.3s ease;
 
-  // Animated background particles
+  // Animated background pattern
   &::before {
     content: '';
     position: fixed;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(57, 255, 20, 0.1) 1px, transparent 1px);
+    background: radial-gradient(circle, rgba(57, 255, 20, 0.05) 1px, transparent 1px);
     background-size: 50px 50px;
     animation: drift 20s linear infinite;
     pointer-events: none;
+    opacity: 0.5;
   }
 }
 
+// Keep your existing animations
 @keyframes drift {
   0% { transform: translate(0, 0); }
   100% { transform: translate(-50px, -50px); }
-}/* You can add global styles to this file, and also import other style files */
+}
 
+@keyframes shimmer {
+  0% { background-position: 0% center; }
+  100% { background-position: 200% center; }
+}
 
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.8; }
+  50% { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes scan {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+// Shared title styles
+.header-title {
+  font-size: 2.5rem;
+  background: linear-gradient(90deg, #39ff14, #2ecc71, #39ff14);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 3s linear infinite;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-weight: 900;
+  margin: 0;
+}
+
+.chart-title,
+.log-title {
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #39ff14, #2ecc71);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 0.5rem;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 2px;
+    background: linear-gradient(90deg, #39ff14, transparent);
+  }
+}
+
+.stat-value {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #39ff14, #2ecc71);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse 2s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+// Dashboard specific
+.dashboard-wrapper {
+  min-height: 100vh;
+  position: relative;
+}
+
+.loading-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #39ff14, transparent);
+  animation: scan 2s linear infinite;
+  z-index: 9999;
+}
+
+.dashboard-container {
+  padding: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+// Smooth theme transitions
+* {
+  transition: 
+    background-color 0.3s ease, background 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease !important;
+}
+
+// Light theme specific styles for log table
+.light-theme {
+  .log-container {
+    .log-title {
+      color: #000000 !important;
+      font-weight: 700;
+    }
+
+    .log-count {
+      color: #000000 !important;
+      opacity: 0.7;
+    }
+
+    .log-table {
+      th {
+        color: #000000 !important;
+        font-weight: 700;
+      }
+
+      td {
+        color: #000000 !important;
+        font-weight: 500;
+      }
+
+      tr:hover td {
+        color: #000000 !important;
+        font-weight: 600;
+      }
+    }
+  }
+}
